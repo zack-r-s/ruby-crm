@@ -1,0 +1,33 @@
+<div class="page-header">
+  <h1>Contacts</h1>
+  <div class="actions">
+    <a class="button" href="/contacts/new">New contact</a>
+    <a class="button secondary" href="/contacts.csv">Export CSV</a>
+  </div>
+</div>
+
+<form class="search" method="get" action="/contacts">
+  <input type="search" name="q" value="<%= h(@query) %>" placeholder="Search, e.g. status:customer tag:vip lin">
+  <button type="submit">Search</button>
+</form>
+
+<% if @contacts.empty? %>
+  <p class="muted">No contacts match.</p>
+<% else %>
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Email</th><th>Title</th><th>Status</th><th>Tags</th></tr>
+    </thead>
+    <tbody>
+      <% @contacts.each do |contact| %>
+        <tr>
+          <td><a href="/contacts/<%= contact.id %>"><%= h(contact.full_name) %></a></td>
+          <td><%= h(contact.email) %></td>
+          <td><%= h(contact.title) %></td>
+          <td><%= status_badge(contact.status) %></td>
+          <td><%= h(contact.tags.join(", ")) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

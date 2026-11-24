@@ -1,0 +1,22 @@
+<h1>Companies</h1>
+
+<% if @companies.empty? %>
+  <p class="muted">No companies yet.</p>
+<% else %>
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Domain</th><th>Industry</th><th>Size</th><th class="num">Contacts</th></tr>
+    </thead>
+    <tbody>
+      <% @companies.each do |company| %>
+        <tr>
+          <td><%= h(company.name) %></td>
+          <td><%= h(company.domain || "—") %></td>
+          <td><%= h(company.industry) %></td>
+          <td><%= h(company.size_band) %></td>
+          <td class="num"><%= @contact_counts.fetch(company.id, 0) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

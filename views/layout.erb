@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ruby CRM</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">Ruby CRM</a>
+    <nav>
+      <a href="/contacts">Contacts</a>
+      <a href="/companies">Companies</a>
+      <a href="/deals">Deals</a>
+    </nav>
+  </header>
+  <main class="container">
+    <%= yield %>
+  </main>
+</body>
+</html>

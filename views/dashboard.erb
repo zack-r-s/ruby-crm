@@ -1,0 +1,78 @@
+<h1>Dashboard</h1>
+
+<section class="cards">
+  <div class="card">
+    <div class="card-label">Open pipeline</div>
+    <div class="card-value"><%= money(@report.open_pipeline_cents) %></div>
+  </div>
+  <div class="card">
+    <div class="card-label">Weighted pipeline</div>
+    <div class="card-value"><%= money(@report.weighted_pipeline_cents) %></div>
+  </div>
+  <div class="card">
+    <div class="card-label">Win rate</div>
+    <div class="card-value"><%= @report.win_rate ? "#{(@report.win_rate * 100).round(1)}%" : "n/a" %></div>
+  </div>
+</section>
+
+<section>
+  <h2>Pipeline</h2>
+  <table>
+    <thead>
+      <tr><th>Stage</th><th class="num">Deals</th><th class="num">Amount</th><th class="num">Weighted</th></tr>
+    </thead>
+    <tbody>
+      <% @report.rows.each do |row| %>
+        <tr>
+          <td><a href="/deals?stage=<%= h(row.stage.key) %>"><%= h(row.stage.label) %></a></td>
+          <td class="num"><%= row.count %></td>
+          <td class="num"><%= money(row.amount_cents) %></td>
+          <td class="num"><%= money(row.weighted_cents) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+
+<section class="two-column">
+  <div>
+    <h2>Forecast</h2>
+    <table>
+      <thead><tr><th>Month</th><th class="num">Weighted</th></tr></thead>
+      <tbody>
+        <% @forecast.each do |month, cents| %>
+          <tr><td><%= h(month) %></td><td class="num"><%= money(cents) %></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    <h2>Tasks</h2>
+    <% if @reminders.empty? %>
+      <p class="muted">Nothing overdue or due soon.</p>
+    <% else %>
+      <ul class="plain">
+        <% @reminders.each do |reminder| %>
+          <li>
+            <strong><%= h(reminder.assignee) %></strong>:
+            <%= reminder.overdue.size %> overdue, <%= reminder.upcoming.size %> due soon
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</section>
+
+<section>
+  <h2>Recent activity</h2>
+  <% if @recent.empty? %>
+    <p class="muted">No activity yet.</p>
+  <% else %>
+    <ul class="plain">
+      <% @recent.each do |activity| %>
+        <li><span class="badge"><%= h(activity.kind) %></span> <%= h(activity.summary) %></li>
+      <% end %>
+    </ul>
+  <% end %>
+</section>

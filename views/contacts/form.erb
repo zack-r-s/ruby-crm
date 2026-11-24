@@ -1,0 +1,62 @@
+<h1>New contact</h1>
+
+<% unless @errors.empty? %>
+  <div class="errors">
+    <p>Please fix the following:</p>
+    <ul>
+      <% @errors.each do |error| %>
+        <li><%= h(error) %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<form class="form" method="post" action="/contacts">
+  <%= csrf_tag %>
+
+  <label>First name
+    <input name="contact[first_name]" value="<%= h(@contact.first_name) %>" required>
+  </label>
+
+  <label>Last name
+    <input name="contact[last_name]" value="<%= h(@contact.last_name) %>" required>
+  </label>
+
+  <label>Email
+    <input type="email" name="contact[email]" value="<%= h(@contact.email) %>" required>
+  </label>
+
+  <label>Phone
+    <input name="contact[phone]" value="<%= h(@contact.phone) %>">
+  </label>
+
+  <label>Title
+    <input name="contact[title]" value="<%= h(@contact.title) %>">
+  </label>
+
+  <label>Company
+    <select name="contact[company_id]">
+      <option value="">None</option>
+      <% @companies.each do |company| %>
+        <option value="<%= company.id %>"<%= selected(@contact.company_id, company.id) %>><%= h(company.name) %></option>
+      <% end %>
+    </select>
+  </label>
+
+  <label>Status
+    <select name="contact[status]">
+      <% CRM::Models::Contact::STATUSES.each do |status| %>
+        <option value="<%= status %>"<%= selected(@contact.status, status) %>><%= status %></option>
+      <% end %>
+    </select>
+  </label>
+
+  <label>Tags (comma separated)
+    <input name="contact[tags]" value="<%= h(@contact.tags.join(", ")) %>">
+  </label>
+
+  <div class="actions">
+    <button type="submit">Save contact</button>
+    <a class="button secondary" href="/contacts">Cancel</a>
+  </div>
+</form>

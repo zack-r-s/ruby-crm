@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "irb"
+require_relative "../lib/crm"
+require_relative "../db/seeds"
+
+counts = CRM::Seeds.load!
+puts "Sample data loaded: #{counts.map { |table, n| "#{n} #{table}" }.join(', ')}"
+IRB.start(__FILE__)

@@ -1,0 +1,37 @@
+<div class="page-header">
+  <h1>Deals</h1>
+  <form method="get" action="/deals">
+    <select name="stage" onchange="this.form.submit()">
+      <option value="">All stages</option>
+      <% CRM::Models::PipelineStage.all.each do |stage| %>
+        <option value="<%= h(stage.key) %>"<%= selected(@stage, stage.key) %>><%= h(stage.label) %></option>
+      <% end %>
+    </select>
+  </form>
+</div>
+
+<% if @deals.empty? %>
+  <p class="muted">No deals in this stage.</p>
+<% else %>
+  <table>
+    <thead>
+      <tr>
+        <th>Deal</th><th>Company</th><th>Stage</th>
+        <th class="num">Amount</th><th>Expected close</th><th>Owner</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @deals.each do |deal| %>
+        <% company = @companies_by_id[deal.company_id] %>
+        <tr class="<%= 'overdue' if deal.overdue? %>">
+          <td><%= h(deal.title) %></td>
+          <td><%= h(company ? company.name : "—") %></td>
+          <td><%= h(stage_label(deal.stage)) %></td>
+          <td class="num"><%= money(deal.amount_cents, deal.currency) %></td>
+          <td><%= date(deal.expected_close_on) %></td>
+          <td><%= h(deal.owner) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -1,0 +1,46 @@
+<div class="page-header">
+  <h1><%= h(@contact.full_name) %></h1>
+  <form method="post" action="/contacts/<%= @contact.id %>/delete" onsubmit="return confirm('Delete this contact?');">
+    <%= csrf_tag %>
+    <button type="submit" class="danger">Delete</button>
+  </form>
+</div>
+
+<dl class="details">
+  <dt>Email</dt><dd><%= h(@contact.email) %></dd>
+  <dt>Phone</dt><dd><%= h(@contact.phone || "—") %></dd>
+  <dt>Title</dt><dd><%= h(@contact.title || "—") %></dd>
+  <dt>Company</dt><dd><%= h(@company ? @company.name : "—") %></dd>
+  <dt>Status</dt><dd><%= status_badge(@contact.status) %></dd>
+  <dt>Tags</dt><dd><%= h(@contact.tags.empty? ? "—" : @contact.tags.join(", ")) %></dd>
+</dl>
+
+<section>
+  <h2>Deals</h2>
+  <% if @deals.empty? %>
+    <p class="muted">No deals.</p>
+  <% else %>
+    <ul class="plain">
+      <% @deals.each do |deal| %>
+        <li><%= h(deal.title) %>: <%= money(deal.amount_cents, deal.currency) %>, <%= h(stage_label(deal.stage)) %></li>
+      <% end %>
+    </ul>
+  <% end %>
+</section>
+
+<section>
+  <h2>Activity</h2>
+  <% if @activities.empty? %>
+    <p class="muted">No activity logged.</p>
+  <% else %>
+    <ul class="plain">
+      <% @activities.each do |activity| %>
+        <li>
+          <span class="badge"><%= h(activity.kind) %></span>
+          <%= h(activity.summary) %>
+          <span class="muted"><%= h(activity.occurred_at.strftime("%Y-%m-%d")) %></span>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</section>
